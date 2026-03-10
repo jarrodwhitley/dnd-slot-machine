@@ -1622,3 +1622,526 @@ html {
   syntax: "*";
   inherits: false
 }
+
+.slot-machine-root {
+  font-family: "Cormorant Garamond", serif;
+  background: linear-gradient(180deg, #040a1b 0%, #12090f 50%, #050505 100%);
+}
+
+.slot-machine-bg {
+  background:
+    radial-gradient(circle at 20% 15%, rgba(234, 179, 8, 0.17), transparent 34%),
+    radial-gradient(circle at 80% 10%, rgba(127, 29, 29, 0.28), transparent 42%),
+    radial-gradient(circle at 50% 85%, rgba(17, 24, 39, 0.58), transparent 50%);
+}
+
+.slot-machine-grain {
+  opacity: 0.24;
+  mix-blend-mode: screen;
+  background:
+    repeating-linear-gradient(135deg, rgba(217, 119, 6, 0.22) 0px, transparent 2px, transparent 16px),
+    repeating-linear-gradient(45deg, rgba(245, 158, 11, 0.14) 0px, transparent 2px, transparent 24px);
+}
+
+.slot-machine-title {
+  font-family: "Cinzel Decorative", serif;
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 18px rgba(248, 113, 113, 0.24);
+}
+
+.slot-machine-subtitle,
+.slot-font-title {
+  font-family: "Cinzel", serif;
+}
+
+.slot-machine-panel {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(30, 8, 8, 0.92) 100%);
+  box-shadow:
+    0 24px 46px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(251, 191, 36, 0.25);
+}
+
+.slot-panel-texture {
+  opacity: 0.2;
+  background: repeating-linear-gradient(180deg, rgba(251, 191, 36, 0.14) 0px, transparent 2px, transparent 18px);
+}
+
+.slot-machine-input {
+  font-family: "Cinzel", serif;
+  background: rgba(17, 24, 39, 0.75);
+  box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.18);
+}
+
+.slot-machine-button {
+  font-family: "Cinzel", serif;
+  box-shadow:
+    0 10px 20px rgba(120, 53, 15, 0.45),
+    inset 0 1px 0 rgba(255, 237, 213, 0.25);
+}
+
+.slot-reel {
+  background: linear-gradient(180deg, #253048 0%, #441010 100%);
+  box-shadow:
+    0 10px 20px rgba(0, 0, 0, 0.45),
+    inset 0 0 0 1px rgba(251, 191, 36, 0.24);
+}
+
+.slot-reel__texture {
+  opacity: 0.25;
+  background: repeating-linear-gradient(0deg, rgba(245, 158, 11, 0.2) 0px, transparent 2px, transparent 12px);
+}
+
+.slot-reel__rune {
+  font-family: "Cinzel Decorative", serif;
+}
+
+.slot-payout-card {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
+}
+
+.infernal-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #e8d9b8;
+  font-family: "Cormorant Garamond", serif;
+  background: linear-gradient(180deg, #090b14 0%, #1a0000 48%, #090508 100%);
+}
+
+.infernal-page__smoke,
+.infernal-page__embers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.infernal-page__smoke {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 75, 62, 0.15), transparent 38%),
+    radial-gradient(circle at 70% 10%, rgba(184, 115, 51, 0.18), transparent 30%),
+    radial-gradient(circle at 50% 84%, rgba(255, 106, 0, 0.1), transparent 40%);
+}
+
+.infernal-page__embers {
+  opacity: 0.22;
+  mix-blend-mode: screen;
+  background:
+    repeating-linear-gradient(35deg, rgba(255, 106, 0, 0.13) 0px, transparent 2px, transparent 16px),
+    repeating-linear-gradient(-25deg, rgba(255, 209, 102, 0.08) 0px, transparent 2px, transparent 22px);
+}
+
+.infernal-shell {
+  position: relative;
+  width: min(980px, 100%);
+  display: grid;
+  gap: 1.4rem;
+}
+
+.infernal-heading__title {
+  margin: 0;
+  color: #ff6b60;
+  font-family: "Cinzel Decorative", serif;
+  font-size: clamp(2rem, 3.8vw, 3.1rem);
+  text-shadow: 0 0 20px rgba(255, 75, 62, 0.24);
+}
+
+.infernal-heading__subtitle {
+  display: none;
+  margin-top: 0.4rem;
+  color: #d8c9a3;
+  font-family: "Cinzel", serif;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+}
+
+.infernal-machine {
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #b87333;
+  background:
+    linear-gradient(180deg, rgba(20, 24, 34, 0.95) 0%, rgba(42, 10, 10, 0.96) 100%);
+  box-shadow:
+    0 24px 44px rgba(0, 0, 0, 0.6),
+    inset 0 0 0 1px rgba(255, 209, 102, 0.25),
+    inset 0 0 55px rgba(255, 75, 62, 0.08);
+}
+
+.infernal-machine--setup {
+  min-height: 300px;
+}
+
+.infernal-machine--game {
+  min-height: 490px;
+}
+
+.infernal-machine__plate {
+  position: absolute;
+  inset: 0;
+  opacity: 0.25;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(180deg, rgba(255, 209, 102, 0.12) 0px, transparent 2px, transparent 18px),
+    radial-gradient(circle at 15% 15%, rgba(255, 106, 0, 0.24), transparent 24%);
+}
+
+.infernal-corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #ffd166;
+  opacity: 0.7;
+}
+
+.infernal-corner--tl {
+  top: 10px;
+  left: 10px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.infernal-corner--tr {
+  top: 10px;
+  right: 10px;
+  border-left: 0;
+  border-bottom: 0;
+}
+
+.infernal-corner--bl {
+  bottom: 10px;
+  left: 10px;
+  border-right: 0;
+  border-top: 0;
+}
+
+.infernal-corner--br {
+  bottom: 10px;
+  right: 10px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.infernal-card-title {
+  text-align: center;
+  color: #ffd166;
+  font-family: "Cinzel", serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+}
+
+.infernal-setup-grid {
+  width: min(440px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.infernal-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #ffd166;
+  font-family: "Cinzel", serif;
+  font-size: 1.2rem;
+}
+
+.infernal-label--compact {
+  font-size: 1rem;
+}
+
+.infernal-input {
+  border: 1px solid #b87333 !important;
+  background: rgba(8, 12, 22, 0.72) !important;
+  color: #ffd166 !important;
+  font-family: "Cinzel", serif;
+  text-align: center;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 209, 102, 0.2),
+    0 0 0 1px rgba(255, 75, 62, 0.06);
+}
+
+.infernal-input--bet {
+  font-size: 1.45rem;
+}
+
+.infernal-button {
+  border: 1px solid #8f5a20;
+  border-radius: 0.6rem;
+  background: linear-gradient(180deg, #d58b2b 0%, #a8621a 100%) !important;
+  color: #150b05 !important;
+  font-family: "Cinzel", serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.02em;
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 232, 183, 0.6);
+}
+
+.infernal-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.infernal-display-panel,
+.infernal-bet-panel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid rgba(184, 115, 51, 0.8);
+  border-radius: 0.5rem;
+  background: linear-gradient(180deg, rgba(20, 24, 34, 0.9) 0%, rgba(26, 8, 8, 0.9) 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 209, 102, 0.14);
+  color: #ffd166;
+  font-family: "Cinzel", serif;
+}
+
+.infernal-bet-panel__unit {
+  color: #e8d9b8;
+}
+
+.infernal-bet-error {
+  margin-top: 0.6rem;
+  text-align: center;
+  color: #ff7d72;
+  font-family: "Cinzel", serif;
+  font-size: 1rem;
+  text-shadow: 0 0 10px rgba(255, 75, 62, 0.25);
+}
+
+.infernal-reel-bank {
+  margin: 1.3rem 0 1rem;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.85rem;
+  border: 1px solid rgba(184, 115, 51, 0.8);
+  border-radius: 0.8rem;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 106, 0, 0.12), transparent 42%), rgba(8, 12, 22, 0.66);
+  box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.55);
+}
+
+.infernal-reel {
+  position: relative;
+  width: 88px;
+  height: 116px;
+  display: grid;
+  place-items: center;
+}
+
+.infernal-reel__window {
+  width: 82px;
+  height: 104px;
+  border: 2px solid #b87333;
+  border-radius: 0.7rem;
+  overflow: hidden;
+  background: linear-gradient(180deg, #26344c 0%, #461111 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 209, 102, 0.24),
+    inset 0 10px 16px rgba(255, 209, 102, 0.05),
+    inset 0 -16px 20px rgba(0, 0, 0, 0.5),
+    0 8px 16px rgba(0, 0, 0, 0.55);
+}
+
+.infernal-reel__drum {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 35%),
+    repeating-linear-gradient(180deg, rgba(255, 209, 102, 0.1) 0px, transparent 2px, transparent 14px);
+}
+
+.infernal-reel__drum--spinning {
+  animation: infernal-drum-spin 0.12s linear infinite;
+}
+
+.infernal-reel__rune {
+  color: #ffd166;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 2.15rem;
+  text-shadow:
+    0 0 6px rgba(255, 209, 102, 0.8),
+    0 0 16px rgba(255, 106, 0, 0.45);
+}
+
+.infernal-reel__axle {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 58px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d0974a 0%, #7f4516 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 209, 102, 0.35);
+}
+
+.infernal-reel__axle--left {
+  left: -2px;
+}
+
+.infernal-reel__axle--right {
+  right: -2px;
+}
+
+.infernal-controls {
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.8rem;
+}
+
+.infernal-controls__label {
+  color: #ffd166;
+  font-family: "Cinzel", serif;
+  font-size: 1.2rem;
+}
+
+.infernal-lever {
+  position: relative;
+  width: 92px;
+  height: 94px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.infernal-lever:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.infernal-lever__base {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 22px;
+  border-radius: 999px;
+  border: 2px solid #b87333;
+  background: linear-gradient(180deg, #3a2a1d 0%, #17110d 100%);
+}
+
+.infernal-lever__arm {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  width: 9px;
+  height: 58px;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(-24deg);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #d0974a 0%, #8a5122 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 209, 102, 0.45);
+  transition: transform 150ms ease;
+  display: block;
+}
+
+.infernal-lever__knob {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  width: 24px;
+  height: 24px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  border: 2px solid #ffb162;
+  background: radial-gradient(circle at 30% 30%, #ffd166 0%, #ff6a00 72%);
+  box-shadow: 0 0 12px rgba(255, 106, 0, 0.55);
+}
+
+.infernal-lever--pulled .infernal-lever__arm {
+  transform: translateX(-50%) rotate(21deg);
+}
+
+.infernal-result {
+  text-align: center;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.infernal-result-slot {
+  min-height: 82px;
+  display: grid;
+  align-items: center;
+}
+
+.infernal-result__text {
+  color: #ffd166;
+  font-family: "Cinzel", serif;
+  font-size: 1.3rem;
+}
+
+.infernal-result__badge {
+  margin: 0 auto;
+  border: 1px solid rgba(124, 240, 168, 0.5);
+  background: linear-gradient(180deg, #16643d 0%, #0e442b 100%) !important;
+  color: #defce8 !important;
+  font-family: "Cinzel", serif;
+}
+
+.infernal-payout {
+  width: min(430px, 100%);
+  border: 1px solid #b87333;
+  background:
+    linear-gradient(180deg, rgba(36, 21, 13, 0.92) 0%, rgba(20, 10, 8, 0.95) 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 209, 102, 0.23),
+    0 12px 22px rgba(0, 0, 0, 0.45);
+}
+
+.infernal-payout__title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ff7f73;
+  font-family: "Cinzel", serif;
+}
+
+.infernal-payout__rows {
+  display: grid;
+  gap: 0.45rem;
+  color: #ffd166;
+  font-family: "Cinzel", serif;
+}
+
+.infernal-payout__row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 209, 102, 0.14);
+  padding-bottom: 0.32rem;
+}
+
+.infernal-game-over {
+  border: 1px solid rgba(255, 75, 62, 0.6);
+  background: linear-gradient(180deg, rgba(58, 10, 10, 0.95) 0%, rgba(25, 6, 6, 0.95) 100%);
+}
+
+.infernal-game-over__title {
+  color: #ff7d72;
+  font-family: "Cinzel Decorative", serif;
+  font-size: 1.8rem;
+}
+
+.infernal-game-over__text {
+  color: #ecd9b3;
+  font-family: "Cinzel", serif;
+  font-size: 1.05rem;
+}
+
+@keyframes infernal-drum-spin {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

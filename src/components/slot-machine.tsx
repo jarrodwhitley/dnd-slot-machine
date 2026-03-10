@@ -8,7 +8,14 @@ import {
   CardTitle,
 } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Coins, Flame } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Coins, Flame, Info } from "lucide-react";
 
 // Add WebKit AudioContext for Safari compatibility
 declare global {
@@ -18,7 +25,7 @@ declare global {
 }
 
 // Infernal runes representing dice faces 1-6
-const INFERNAL_RUNES = ["☥", "⚡", "🔥", "☠", "⚔", "👁"];
+const INFERNAL_RUNES = ["ᚠ", "ᛉ", "⟁", "☿", "⟡", "𐌑"];
 
 interface ReelProps {
   value: number;
@@ -47,38 +54,19 @@ function Reel({ value, isSpinning }: ReelProps) {
   }, [isSpinning, value]);
 
   return (
-    <div className="w-20 h-24 bg-gradient-to-b from-red-900 to-red-950 border-2 border-yellow-600 rounded-lg flex items-center justify-center shadow-lg">
-      <span className="text-4xl text-yellow-400 drop-shadow-lg">
-        {INFERNAL_RUNES[displayValue]}
-      </span>
+    <div className="infernal-reel">
+      <div className="infernal-reel__axle infernal-reel__axle--left" />
+      <div className="infernal-reel__window">
+        <div
+          className={`infernal-reel__drum ${isSpinning ? "infernal-reel__drum--spinning" : ""}`}
+        >
+          <span className="infernal-reel__rune">
+            {INFERNAL_RUNES[displayValue]}
+          </span>
+        </div>
+      </div>
+      <div className="infernal-reel__axle infernal-reel__axle--right" />
     </div>
-  );
-}
-
-function PayoutTable() {
-  return (
-    <Card className="bg-gray-900 border-red-800">
-      <CardHeader>
-        <CardTitle className="text-red-400 flex items-center gap-2">
-          <Flame className="w-5 h-5" />
-          Copper Slots Payouts
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="flex justify-between text-yellow-400">
-          <span>Three of a kind:</span>
-          <span>2-to-1</span>
-        </div>
-        <div className="flex justify-between text-yellow-400">
-          <span>Four of a kind:</span>
-          <span>4-to-1</span>
-        </div>
-        <div className="flex justify-between text-yellow-400">
-          <span>Five of a kind:</span>
-          <span>10-to-1</span>
-        </div>
-      </CardContent>
-    </Card>
   );
 }
 
@@ -90,6 +78,10 @@ export function SlotMachine() {
   const [lastWin, setLastWin] = useState(0);
   const [lastResult, setLastResult] = useState<string>("");
   const [gameStarted, setGameStarted] = useState(false);
+  const [betError, setBetError] = useState<string>("");
+
+  const normalizeNumericInput = (rawValue: string) =>
+    rawValue.replace(/\D/g, "").replace(/^0+(?=\d)/, "");
   
   // Audio context and sound refs
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -189,20 +181,40 @@ export function SlotMachine() {
 
     // Determine payout based on matches
     if (maxCount >= 5) {
-      return { multiplier: 10, result: "Five of a kind!" };
+      return {
+        multiplier: 10,
+        result: "Five runes align — the devils pay in full.",
+      };
     } else if (maxCount >= 4) {
-      return { multiplier: 4, result: "Four of a kind!" };
+      return {
+        multiplier: 4,
+        result: "Four runes lock — infernal gears release your prize.",
+      };
     } else if (maxCount >= 3) {
-      return { multiplier: 2, result: "Three of a kind!" };
+      return {
+        multiplier: 2,
+        result: "Three runes align — the machine yields a modest boon.",
+      };
     }
 
-    return { multiplier: 0, result: "No match" };
+    return {
+      multiplier: 0,
+      result: "The machine claims your offering.",
+    };
   };
 
   const spinReels = () => {
-    if (bet < 1 || bet > 9 || bet > copper || isSpinning)
+    if (bet > copper) {
+      setBetError(
+        "Your wager exceeds the copper in your purse.",
+      );
+      return;
+    }
+
+    if (bet < 1 || bet > 9 || isSpinning)
       return;
 
+    setBetError("");
     setIsSpinning(true);
     setCopper((prev) => prev - bet);
     setLastWin(0);
@@ -239,98 +251,168 @@ export function SlotMachine() {
     }, 1600); // Slightly longer than max reel animation time
   };
 
+  const startMachine = () => {
+    if (copper < 1) return;
+    setGameStarted(true);
+  };
+
+  const handleSetupSubmit = (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault();
+    startMachine();
+  };
+
+  const handleSpinSubmit = (
+    e: React.FormEvent<HTMLFormElement>,
+  ) => {
+    e.preventDefault();
+    spinReels();
+  };
+
   const handleBetChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const value = parseInt(e.target.value) || 1;
-    setBet(Math.max(1, Math.min(9, value)));
+    const normalizedValue = normalizeNumericInput(
+      e.target.value,
+    );
+    const value =
+      normalizedValue === ""
+        ? 1
+        : parseInt(normalizedValue, 10);
+    const nextBet = Math.max(1, Math.min(9, value));
+    setBet(nextBet);
+
+    if (nextBet > copper) {
+      setBetError(
+        "Your wager exceeds the copper in your purse.",
+      );
+    } else {
+      setBetError("");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black p-4 flex flex-col items-center justify-center">
-      <div className="max-w-4xl w-full space-y-6">
+    <div className="infernal-page">
+      <div className="infernal-page__smoke" />
+      <div className="infernal-page__embers" />
+      <div className="infernal-shell">
         {/* Title */}
-        <div className="text-center">
-          <h1 className="text-4xl text-red-400 mb-2 drop-shadow-lg">
+        <div className="infernal-heading text-center">
+          <h1 className="infernal-heading__title">
             Tricky Devils Slot Machine
           </h1>
-          <p className="text-gray-400">
-            Insert copper coins and pull the lever to match
-            Infernal runes!
+          <p className="infernal-heading__subtitle">
+            Feed copper into the infernal clockwork and
+            pull the lever to align cursed runes.
           </p>
         </div>
 
         {/* Currency Setup */}
         {!gameStarted && (
-          <Card className="bg-gradient-to-b from-gray-800 to-gray-900 border-yellow-600 border-2">
+          <Card className="infernal-machine infernal-machine--setup">
+            <div className="infernal-machine__plate" />
+            <div className="infernal-corner infernal-corner--tl" />
+            <div className="infernal-corner infernal-corner--tr" />
+            <div className="infernal-corner infernal-corner--bl" />
+            <div className="infernal-corner infernal-corner--br" />
             <CardHeader>
-              <CardTitle className="text-yellow-400 text-center">
-                Set Your Starting Copper Coins
+              <CardTitle className="infernal-card-title">
+                Prime the Tricky Devils Machine
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="max-w-sm mx-auto space-y-2">
-                <label className="text-yellow-400 flex items-center gap-2">
-                  <Coins className="w-5 h-5 text-orange-500" />
-                  Copper Coins
-                </label>
-                <Input
-                  type="number"
-                  min="1"
-                  value={copper}
-                  onChange={(e) =>
-                    setCopper(parseInt(e.target.value) || 0)
-                  }
-                  className="bg-gray-800 border-yellow-600 text-yellow-400 text-center"
-                  placeholder="Enter amount"
-                />
-              </div>
-              <div className="text-center">
-                <Button
-                  onClick={() => setGameStarted(true)}
-                  disabled={copper < 1}
-                  className="bg-gradient-to-b from-yellow-600 to-yellow-800 hover:from-yellow-500 hover:to-yellow-700 text-black px-8 py-2"
-                >
-                  Start Playing
-                </Button>
-              </div>
+            <CardContent className="relative space-y-4">
+              <form
+                className="space-y-4"
+                onSubmit={handleSetupSubmit}
+              >
+                <div className="infernal-setup-grid">
+                  <label className="infernal-label">
+                    <Coins className="w-5 h-5 text-orange-500" />
+                    Offering in Copper Coins
+                  </label>
+                  <Input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    min="1"
+                    value={copper}
+                    onChange={(e) => {
+                      const normalizedValue =
+                        normalizeNumericInput(
+                          e.target.value,
+                        );
+                      setCopper(
+                        normalizedValue === ""
+                          ? 0
+                          : parseInt(normalizedValue, 10),
+                      );
+                    }}
+                    className="infernal-input h-14"
+                    placeholder="0"
+                  />
+                </div>
+                <div className="text-center mt-3">
+                  <Button
+                    type="submit"
+                    disabled={copper < 1}
+                    className="infernal-button"
+                  >
+                    Awaken the Machine
+                  </Button>
+                </div>
+              </form>
             </CardContent>
           </Card>
         )}
 
         {/* Main Game Area */}
         {gameStarted && (
-          <Card className="bg-gradient-to-b from-red-950 to-red-900 border-yellow-600 border-2">
-            <CardContent className="p-8 h-[40vh]">
-              {/* Currency Display and Bet */}
-              <div className="flex flex-col lg:flex-row justify-between items-center mb-6 gap-4">
-                <div className="flex items-center gap-2 text-yellow-400">
+          <Card className="infernal-machine infernal-machine--game">
+            <div className="infernal-machine__plate" />
+            <div className="infernal-corner infernal-corner--tl" />
+            <div className="infernal-corner infernal-corner--tr" />
+            <div className="infernal-corner infernal-corner--bl" />
+            <div className="infernal-corner infernal-corner--br" />
+            <CardContent className="relative p-8">
+              <form onSubmit={handleSpinSubmit}>
+              <div className="infernal-topline">
+                <div className="infernal-display-panel">
                   <Coins className="w-6 h-6 text-orange-500" />
-                  <span className="text-xl">
-                    {copper} copper coins
-                  </span>
+                  <span>{copper} copper in purse</span>
                 </div>
-                <div className="flex items-center gap-4">
-                  <label className="text-yellow-400">
+                <div className="infernal-bet-panel">
+                  <label className="infernal-label infernal-label--compact">
                     Bet:
                   </label>
                   <Input
-                    type="number"
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     min="1"
                     max="9"
                     value={bet}
                     onChange={handleBetChange}
-                    className="w-20 bg-gray-800 border-yellow-600 text-yellow-400"
+                    className="infernal-input infernal-input--bet w-20 h-11"
                     disabled={isSpinning}
+                    aria-invalid={bet > copper}
                   />
-                  <span className="text-yellow-400">
+                  <span className="infernal-bet-panel__unit">
                     copper
                   </span>
                 </div>
               </div>
 
+              <div className="infernal-bet-error-slot">
+                {betError && (
+                  <div className="infernal-bet-error">
+                    {betError}
+                  </div>
+                )}
+              </div>
+
               {/* Reels */}
-              <div className="flex justify-center gap-4 mb-6">
+              <div className="infernal-reel-bank">
                 {reels.map((reel, index) => (
                   <Reel
                     key={index}
@@ -340,53 +422,93 @@ export function SlotMachine() {
                 ))}
               </div>
 
-              {/* Spin Button */}
-              <div className="text-center mb-4">
-                <Button
-                  onClick={spinReels}
+              <div className="infernal-controls">
+                <button
+                  type="submit"
                   disabled={
                     isSpinning || bet > copper || copper < 1
                   }
-                  className="bg-gradient-to-b from-yellow-600 to-yellow-800 hover:from-yellow-500 hover:to-yellow-700 text-black text-xl px-8 py-4 rounded-lg shadow-lg disabled:opacity-50"
+                  className={`infernal-lever ${isSpinning ? "infernal-lever--pulled" : ""}`}
                 >
-                  {isSpinning ? "Spinning..." : "Pull Lever!"}
-                </Button>
+                  <span className="infernal-lever__base" />
+                  <span className="infernal-lever__arm">
+                    <span className="infernal-lever__knob" />
+                  </span>
+                </button>
+                <div className="infernal-controls__label">
+                  {isSpinning
+                    ? "Gears in motion..."
+                    : "Pull the Lever"}
+                </div>
               </div>
 
               {/* Results */}
-              {lastResult && (
-                <div className="text-center space-y-2">
-                  <div className="text-xl text-yellow-400">
-                    {lastResult}
+              <div className="infernal-result-slot">
+                {lastResult && (
+                  <div className="infernal-result">
+                    <div className="infernal-result__text">
+                      {lastResult}
+                    </div>
+                    {lastWin > 0 && (
+                      <Badge className="infernal-result__badge">
+                        You gain {lastWin} copper.
+                      </Badge>
+                    )}
                   </div>
-                  {lastWin > 0 && (
-                    <Badge className="bg-green-700 text-green-100 text-lg px-4 py-2">
-                      Won {lastWin} copper!
-                    </Badge>
-                  )}
-                </div>
-              )}
+                )}
+              </div>
+              </form>
             </CardContent>
           </Card>
         )}
 
-        {/* Payout Table */}
+        {/* Payout Info Button */}
         {gameStarted && (
           <div className="flex justify-center">
-            <PayoutTable />
+            <Dialog>
+              <DialogTrigger asChild>
+                <button className="infernal-info-button">
+                  <Info className="w-4 h-4" />
+                  <span>Payout Table</span>
+                </button>
+              </DialogTrigger>
+              <DialogContent className="infernal-dialog">
+                <DialogHeader>
+                  <DialogTitle className="infernal-payout__title">
+                    <Flame className="w-5 h-5" />
+                    Tricky Devils Payout Plate
+                  </DialogTitle>
+                </DialogHeader>
+                <div className="infernal-payout__rows">
+                  <div className="infernal-payout__row">
+                    <span>Three of a kind:</span>
+                    <span>2-to-1</span>
+                  </div>
+                  <div className="infernal-payout__row">
+                    <span>Four of a kind:</span>
+                    <span>4-to-1</span>
+                  </div>
+                  <div className="infernal-payout__row">
+                    <span>Five of a kind:</span>
+                    <span>10-to-1</span>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         )}
 
         {/* Game Over */}
         {gameStarted && copper < 1 && (
-          <Card className="bg-red-900 border-red-600">
+          <Card className="infernal-game-over">
             <CardContent className="p-6 text-center">
-              <h3 className="text-xl text-red-400 mb-2">
+              <h3 className="infernal-game-over__title">
                 Out of Copper!
               </h3>
-              <p className="text-gray-300">
-                You're out of copper coins. The devils have
-                claimed their due!
+              <p className="infernal-game-over__text">
+                The machine has taken your last offering.
+                Return with more copper to tempt the devils
+                again.
               </p>
               <div className="mt-4">
                 <Button
@@ -396,9 +518,9 @@ export function SlotMachine() {
                     setLastResult("");
                     setCopper(0);
                   }}
-                  className="bg-blue-700 hover:bg-blue-600"
+                  className="infernal-button"
                 >
-                  Play Again
+                  Rekindle the Machine
                 </Button>
               </div>
             </CardContent>
