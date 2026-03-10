@@ -1,0 +1,24 @@
+services:
+  trickydevils:
+    image: ghcr.io/jarrodwhitley/trickydevils:latest
+    container_name: trickydevils
+    restart: unless-stopped
+    networks:
+      - npm_default
+    expose:
+      - "80"
+
+  watchtower:
+    image: containrrr/watchtower:1.7.1
+    container_name: watchtower_trickydevils
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup --interval 300 trickydevils
+    networks:
+      - npm_default
+
+networks:
+  npm_default:
+    external: true
+    name: npm_default
